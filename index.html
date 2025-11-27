@@ -1,286 +1,145 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Строитель на все руки</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background-color: #121212;
-      color: #fff;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Маляр на Святошино — Віктор Карпік</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+  body { background-color:#0a0a0a; color:#fff; overflow-x:hidden; }
 
-    /* ----- Навигация ----- */
-    header {
-      background-color: #1a1a1a;
-      padding: 20px 50px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 2px solid #ff6b00;
-    }
+  header { display:flex; align-items:center; justify-content:space-between; background:#111; padding:15px 60px; box-shadow:0 0 15px rgba(255,255,255,0.1); position:fixed; top:0; width:100%; z-index:100; }
 
-    header h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      color: #ff6b00;
-    }
+  .logo { display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .logo svg { width:35px; height:35px; fill:gold; transition: transform 0.5s; }
+  .logo:hover svg { transform: rotate(360deg); }
+  .logo span { font-weight:700; font-size:1.2em; color:gold; }
 
-    nav a {
-      color: #ff6b00;
-      font-weight: 600;
-      margin-left: 25px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: 0.3s;
-    }
+  nav { display:flex; gap:25px; }
+  nav a { text-decoration:none; color:#ccc; font-size:1em; transition: color 0.3s, transform 0.3s; }
+  nav a:hover { color:gold; transform:scale(1.1); }
 
-    nav a:hover {
-      background-color: #ff6b00;
-      color: #121212;
-    }
+  section { padding:120px 60px; max-width:1200px; margin:auto; }
 
-    /* ----- HERO ----- */
-    .hero {
-      height: 75vh;
-      background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1581091012184-0c0c18f1b98b?fit=crop&w=1400&q=80') center/cover no-repeat;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-      padding: 0 20px;
-    }
+  /* HERO */
+  .hero { text-align:center; margin-top:60px; position:relative; padding:180px 60px 120px 60px; border-radius:15px; overflow:hidden; border:2px solid gold; }
+  .hero h1 { font-size:3em; color:gold; margin-bottom:15px; position:relative; z-index:2; }
+  .hero p { font-size:1.3em; color:#ddd; position:relative; z-index:2; }
 
-    .hero h2 {
-      font-size: 3.2rem;
-      margin: 0 0 15px;
-    }
+  /* Анімований фон під рамкою */
+  .hero::before {
+    content:"";
+    position:absolute;
+    top:0; left:0; width:100%; height:100%;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(200,200,200,0.05) 0px,
+      rgba(200,200,200,0.05) 2px,
+      transparent 2px,
+      transparent 20px
+    );
+    z-index:1;
+    animation: moveBg 15s linear infinite;
+  }
 
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      margin: auto;
-    }
+  @keyframes moveBg {
+    0% { background-position:0 0; }
+    100% { background-position:200px 200px; }
+  }
 
-    /* ----- Блоки сайта ----- */
-    section {
-      padding: 60px 40px;
-    }
+  /* Послуги */
+  .services { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:25px; margin-top:60px; }
+  .service { background:#141414; border:1px solid #222; border-radius:10px; padding:0 0 20px; text-align:center; transition:0.3s; }
+  .service:hover { background:#1d1d1d; border-color:gold; transform:translateY(-5px);}
+  .service img { width:100%; height:180px; object-fit:cover; border-radius:10px 10px 0 0;}
+  .service h3 { color:gold; margin:15px 0 10px;}
+  .service p { padding:0 15px; }
 
-    h2.section-title {
-      text-align: center;
-      font-size: 2.3rem;
-      margin-bottom: 40px;
-      color: #ff6b00;
-    }
+  .contact-btn { display:block; margin:60px auto; background:gold; color:#000; font-weight:700; padding:15px 30px; border:none; border-radius:8px; cursor:pointer; font-size:1.1em; transition: background 0.3s;}
+  .contact-btn:hover { background:#ffcc00; }
 
-    /* ----- Услуги ----- */
-    .services {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 35px;
-    }
+  footer { text-align:center; padding:30px; background:#111; color:#888; border-top:1px solid #222; }
 
-    .card {
-      background: #1e1e1e;
-      width: 270px;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      transition: 0.3s;
-      border: 2px solid transparent;
-    }
-    .card:hover {
-      border-color: #ff6b00;
-      transform: translateY(-8px);
-      box-shadow: 0 0 20px #ff6b00;
-    }
+  /* Контактне вікно */
+  .contact-popup { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); background:#111; border:1px solid gold; padding:40px 60px; border-radius:15px; box-shadow:0 0 20px gold; text-align:center; transition: transform 0.4s ease; z-index:999;}
+  .contact-popup.active { transform:translate(-50%,-50%) scale(1);}
+  .contact-popup h2 { color:gold; margin-bottom:15px; }
+  .contact-popup p { font-size:1.2em; }
+  .close-popup { position:absolute; top:10px; right:20px; font-size:1.5em; color:gold; cursor:pointer; }
 
-    /* ----- Почему выбирают нас ----- */
-    .why {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-    }
-
-    .why-item {
-      background: #1e1e1e;
-      width: 350px;
-      padding: 25px;
-      border-radius: 10px;
-      border-left: 4px solid #ff6b00;
-    }
-
-    /* ----- Проекты ----- */
-    .projects {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 25px;
-    }
-
-    .project-img {
-      width: 320px;
-      height: 200px;
-      background-size: cover;
-      background-position: center;
-      border-radius: 10px;
-      border: 2px solid #ff6b00;
-      transition: 0.3s;
-    }
-
-    .project-img:hover {
-      transform: scale(1.05);
-    }
-
-    /* ----- Этапы работы ----- */
-    .steps {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    .step {
-      margin-bottom: 20px;
-      padding: 15px 20px;
-      border-left: 6px solid #ff6b00;
-      background: #1e1e1e;
-      border-radius: 7px;
-    }
-
-    /* ----- Попап ----- */
-    #contactPopup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      background: #1a1a1a;
-      border: 2px solid #ff6b00;
-      padding: 40px 60px;
-      border-radius: 12px;
-      text-align: center;
-      z-index: 100;
-      transition: 0.3s;
-    }
-    #contactPopup.show { transform: translate(-50%, -50%) scale(1); }
-
-    #contactPopup p {
-      font-size: 1.7rem;
-      margin: 0;
-      color: #ff6b00;
-      font-weight: bold;
-    }
-
-    #contactPopup button {
-      margin-top: 20px;
-      padding: 10px 25px;
-      border: 2px solid #ff6b00;
-      background: none;
-      color: #ff6b00;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: 0.3s;
-    }
-
-    #contactPopup button:hover {
-      background: #ff6b00;
-      color: #121212;
-    }
-
-    /* ----- Футер ----- */
-    footer {
-      background: #1a1a1a;
-      padding: 40px 30px;
-      text-align: center;
-      border-top: 2px solid #ff6b00;
-    }
-  </style>
+</style>
 </head>
 <body>
 
 <header>
-  <h1>Строитель на все руки</h1>
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+      <path d="M32 2C30 8 26 16 22 22c-4 6-10 10-10 16 0 4 3 6 6 6s6-2 6-6c0-6-6-10-10-16C18 10 24 6 26 2h6zM38 2c2 4 8 8 14 20-4 6-10 10-10 16 0 4 3 6 6 6s6-2 6-6c0-6-6-10-10-16C46 8 42 4 40 2h-2z"/>
+    </svg>
+    <span>Віктор Карпік</span>
+  </div>
   <nav>
-    <a href="#services">Услуги</a>
-    <a href="#why">Почему мы</a>
-    <a href="#projects">Проекты</a>
-    <a href="#steps">Этапы</a>
-    <a href="#" onclick="showContact()">Связаться</a>
+    <a href="#about">Про мене</a>
+    <a href="#services">Послуги</a>
+    <a href="#contact">Контакти</a>
   </nav>
 </header>
 
-<section class="hero">
-  <h2>Строим. Чиним. Создаём.</h2>
-  <p>Надёжная строительная бригада, которая выполняет любую работу качественно и в срок.</p>
+<section class="hero" id="about">
+  <h1>Маляр на Святошино</h1>
+  <p>Професійний майстер з досвідом понад 10 років. Якісне фарбування, ремонтні роботи, декоративні покриття — все на вищому рівні.</p>
 </section>
 
 <section id="services">
-  <h2 class="section-title">Наши услуги</h2>
+  <h2 style="color: gold; text-align:center;">Послуги</h2>
+
   <div class="services">
-    <div class="card"><h3>Ремонт квартир</h3><p>От косметического до капитального.</p></div>
-    <div class="card"><h3>Строительство домов</h3><p>Полный цикл «под ключ».</p></div>
-    <div class="card"><h3>Дизайн интерьера</h3><p>Стильно, современно, комфортно.</p></div>
-    <div class="card"><h3>Электромонтаж</h3><p>Профессионально и безопасно.</p></div>
-    <div class="card"><h3>Отделочные работы</h3><p>Любые материалы и техники.</p></div>
+
+    <div class="service">
+      <img src="https://images.unsplash.com/photo-1600585154340-1f6c1c3c5d15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1000" alt="Фарбування стін">
+      <h3>Фарбування стін</h3>
+      <p>Чисте, рівне та довговічне фарбування. Професійний інструмент + якісні матеріали.</p>
+    </div>
+
+    <div class="service">
+      <img src="https://images.unsplash.com/photo-1611175699895-ef314d8588c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1000" alt="Шпаклювання">
+      <h3>Шпаклювання</h3>
+      <p>Ідеальна підготовка стін під фарбування або шпалери. Гладко, рівно, акуратно.</p>
+    </div>
+
+    <div class="service">
+      <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1000" alt="Декоративні стіни">
+      <h3>Декоративні стіни</h3>
+      <p>Стильні покриття під бетон, мармур, перламутр. Преміальний дизайн для дому.</p>
+    </div>
+
   </div>
 </section>
 
-<section id="why">
-  <h2 class="section-title">Почему выбирают нас</h2>
-  <div class="why">
-    <div class="why-item">✔ Более 10 лет опыта</div>
-    <div class="why-item">✔ Работаем по договору</div>
-    <div class="why-item">✔ Чёткие сроки сдачи</div>
-    <div class="why-item">✔ Прозрачная смета без скрытых платежей</div>
-  </div>
+<section id="contact">
+  <button class="contact-btn" id="showContact">Зв'язатися</button>
 </section>
-
-<section id="projects">
-  <h2 class="section-title">Наши проекты</h2>
-  <div class="projects">
-    <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1507089947368-19c1da9775ae?fit=crop&w=900');"></div>
-    <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1501183638710-841dd1904471?fit=crop&w=900');"></div>
-    <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?fit=crop&w=900');"></div>
-  </div>
-</section>
-
-<section id="steps">
-  <h2 class="section-title">Этапы работы</h2>
-  <div class="steps">
-    <div class="step"><b>1. Консультация</b> — обсуждаем задачу и бюджет.</div>
-    <div class="step"><b>2. Смета</b> — составляем точный расчёт стоимости.</div>
-    <div class="step"><b>3. Договор</b> — фиксируем сроки и обязательства.</div>
-    <div class="step"><b>4. Работа</b> — выполняем всё в срок и качественно.</div>
-    <div class="step"><b>5. Сдача объекта</b> — передаём работу и даём гарантию.</div>
-  </div>
-</section>
-
-<div id="contactPopup">
-  <p>📞 +380 00 000 0000</p>
-  <button onclick="hideContact()">Закрыть</button>
-</div>
 
 <footer>
-  © 2025 Строитель на все руки — строительная компания нового уровня
+  © 2025 Віктор Карпік | Маляр на Святошино
 </footer>
 
+<div class="contact-popup" id="popup">
+  <span class="close-popup" id="closePopup">&times;</span>
+  <h2>Зв'язок з майстром</h2>
+  <p>📞 Телефон: <strong>+380680765596</strong></p>
+  <p>📍 Район: Святошино, Київ</p>
+</div>
+
 <script>
-  function showContact() {
-    document.getElementById("contactPopup").classList.add("show");
-  }
-  function hideContact() {
-    document.getElementById("contactPopup").classList.remove("show");
-  }
+  const btn = document.getElementById('showContact');
+  const popup = document.getElementById('popup');
+  const closeBtn = document.getElementById('closePopup');
+
+  btn.addEventListener('click', () => { popup.classList.add('active'); });
+  closeBtn.addEventListener('click', () => { popup.classList.remove('active'); });
+  window.addEventListener('click', (e) => { if(e.target === popup) popup.classList.remove('active'); });
 </script>
 
 </body>
 </html>
-
