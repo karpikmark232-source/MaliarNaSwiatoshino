@@ -16,7 +16,7 @@
   .logo span { font-weight:700; font-size:1.2em; color:gold; }
 
   nav { display:flex; gap:25px; }
-  nav a { text-decoration:none; color:#ccc; font-size:1em; transition: color 0.3s, transform 0.3s; }
+  nav a { text-decoration:none; color:#ccc; font-size:1em; transition: color 0.3s, transform 0.3s; cursor:pointer; }
   nav a:hover { color:gold; transform:scale(1.1); }
 
   section { padding:120px 60px; max-width:1200px; margin:auto; }
@@ -26,7 +26,6 @@
   .hero h1 { font-size:3em; color:gold; margin-bottom:15px; position:relative; z-index:2; }
   .hero p { font-size:1.3em; color:#ddd; position:relative; z-index:2; }
 
-  /* Анімований фон під рамкою */
   .hero::before {
     content:"";
     position:absolute;
@@ -61,12 +60,34 @@
   footer { text-align:center; padding:30px; background:#111; color:#888; border-top:1px solid #222; }
 
   /* Контактне вікно */
-  .contact-popup { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0); background:#111; border:1px solid gold; padding:40px 60px; border-radius:15px; box-shadow:0 0 20px gold; text-align:center; transition: transform 0.4s ease; z-index:999;}
-  .contact-popup.active { transform:translate(-50%,-50%) scale(1);}
-  .contact-popup h2 { color:gold; margin-bottom:15px; }
-  .contact-popup p { font-size:1.2em; }
-  .close-popup { position:absolute; top:10px; right:20px; font-size:1.5em; color:gold; cursor:pointer; }
+  .contact-popup, .gallery-popup {
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) scale(0);
+    background:#111; border:2px solid gold; border-radius:15px; box-shadow:0 0 30px rgba(255,215,0,0.4);
+    text-align:center; transition: transform 0.4s ease; z-index:999; max-width:90%; max-height:90%; overflow:auto;
+  }
+  .contact-popup.active, .gallery-popup.active { transform:translate(-50%,-50%) scale(1); }
+  .contact-popup h2, .gallery-popup h2 { color:gold; margin:20px 0 15px; }
+  .contact-popup p { font-size:1.2em; margin:10px 0; }
+  .close-popup { position:absolute; top:10px; right:20px; font-size:2em; color:gold; cursor:pointer; z-index:10; }
 
+  /* Галерея */
+  .gallery-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:15px;
+    padding:20px;
+  }
+  .gallery-grid img {
+    width:100%;
+    height:auto;
+    border-radius:8px;
+    border:1px solid #333;
+    transition:transform 0.3s, box-shadow 0.3s;
+  }
+  .gallery-grid img:hover {
+    transform:scale(1.05);
+    box-shadow:0 0 20px gold;
+  }
 </style>
 </head>
 <body>
@@ -80,6 +101,7 @@
   </div>
   <nav>
     <a href="#about">Про мене</a>
+    <a id="openGallery">Галерея</a>
     <a href="#services">Послуги</a>
     <a href="#contact">Контакти</a>
   </nav>
@@ -95,8 +117,9 @@
 
   <div class="services">
 
+    <!-- Твоє фото замість старого -->
     <div class="service">
-      <img src="https://images.unsplash.com/photo-1600585154340-1f6c1c3c5d15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1000" alt="Фарбування стін">
+      <img src="https://files.catbox.sh/8v4q3b.jpg" alt="Фарбування стін">
       <h3>Фарбування стін</h3>
       <p>Чисте, рівне та довговічне фарбування. Професійний інструмент + якісні матеріали.</p>
     </div>
@@ -124,21 +147,44 @@
   © 2025 Віктор Карпік | Маляр на Святошино
 </footer>
 
+<!-- Контактне вікно -->
 <div class="contact-popup" id="popup">
-  <span class="close-popup" id="closePopup">&times;</span>
+  <span class="close-popup" id="closePopup">×</span>
   <h2>Зв'язок з майстром</h2>
-  <p>📞 Телефон: <strong>+380680765596</strong></p>
-  <p>📍 Район: Святошино, Київ</p>
+  <p>Телефон: <strong>+380680765596</strong></p>
+  <p>Район: Святошино, Київ</p>
+</div>
+
+<!-- Галерея -->
+<div class="gallery-popup" id="gallery">
+  <span class="close-popup" id="closeGallery">×</span>
+  <h2>Мої роботи</h2>
+  <div class="gallery-grid">
+    <img src="https://files.catbox.sh/8v4q3b.jpg" alt="Робота 1">
+    <img src="https://files.catbox.sh/7k9p2m.jpg" alt="Робота 2">
+    <img src="https://files.catbox.sh/3f1r8t.jpg" alt="Робота 3">
+    <img src="https://files.catbox.sh/9m5h6x.jpg" alt="Робота 4">
+  </div>
 </div>
 
 <script>
+  // Контактне вікно
   const btn = document.getElementById('showContact');
   const popup = document.getElementById('popup');
   const closeBtn = document.getElementById('closePopup');
 
-  btn.addEventListener('click', () => { popup.classList.add('active'); });
-  closeBtn.addEventListener('click', () => { popup.classList.remove('active'); });
+  btn.addEventListener('click', () => popup.classList.add('active'));
+  closeBtn.addEventListener('click', () => popup.classList.remove('active'));
   window.addEventListener('click', (e) => { if(e.target === popup) popup.classList.remove('active'); });
+
+  // Галерея
+  const galleryBtn = document.getElementById('openGallery');
+  const gallery = document.getElementById('gallery');
+  const closeGallery = document.getElementById('closeGallery');
+
+  galleryBtn.addEventListener('click', () => gallery.classList.add('active'));
+  closeGallery.addEventListener('click', () => gallery.classList.remove('active'));
+  window.addEventListener('click', (e) => { if(e.target === gallery) gallery.classList.remove('active'); });
 </script>
 
 </body>
