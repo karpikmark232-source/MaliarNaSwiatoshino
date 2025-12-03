@@ -556,7 +556,7 @@
                 <svg class="wheat-icon" viewBox="0 0 100 100" fill="white">
                     <path d="M50 10 L50 90 M40 20 L50 10 L60 20 M35 30 L50 15 L65 30 M30 40 L50 20 L70 40 M35 50 L50 35 L65 50 M40 60 L50 50 L60 60 M45 70 L50 65 L55 70"/>
                 </svg>
-                <span>Віктор Маляр на Святошино</span>
+                <span>Карпік Віктор</span>
             </div>
             <ul class="nav-links">
                 <li><a href="#home">Головна</a></li>
@@ -778,9 +778,9 @@
             });
         });
 
-        // Form Submit with Telegram
+        // Form Submit with Telegram (відправка двом користувачам)
         const TELEGRAM_BOT_TOKEN = '8275254294:AAGn8ME613vv4xClneQx8ZjSMY0MinbSZGA';
-        const TELEGRAM_CHAT_ID = '1855190196';
+        const TELEGRAM_CHAT_IDS = ['1855190196', '5335702687']; // Заявки отримають обидва
 
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -808,19 +808,25 @@ ${message}
             button.disabled = true;
 
             try {
-                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: telegramMessage,
-                        parse_mode: 'HTML'
+                // Відправляємо повідомлення обом користувачам
+                const sendPromises = TELEGRAM_CHAT_IDS.map(chatId => 
+                    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId,
+                            text: telegramMessage,
+                            parse_mode: 'HTML'
+                        })
                     })
-                });
+                );
 
-                if (response.ok) {
+                const responses = await Promise.all(sendPromises);
+                const allOk = responses.every(r => r.ok);
+
+                if (allOk) {
                     alert('✅ Дякуємо за заявку! Ми зв\'яжемося з вами найближчим часом.');
                     form.reset();
                 } else {
